@@ -1,0 +1,8 @@
+name: Display information
+on: workflow_dispatch
+jobs:
+  display-info:
+    runs-on: windows-latest
+    steps:
+      - name: Display Github Context
+        run: echo "${{ toJson(github) }}"
