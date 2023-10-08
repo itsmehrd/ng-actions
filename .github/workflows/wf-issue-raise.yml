@@ -1,7 +1,5 @@
 name: "Workflow-02: Output event details on issues"
-on:
-  issues:
-    types: [opened, edited, milestoned]
+on: issues
 jobs:
   do-output-the-event-details:
     runs-on: windows-latest
