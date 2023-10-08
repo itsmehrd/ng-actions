@@ -15,7 +15,7 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: "Step-01: 'Install NODE_MODULES'"
-        run: npm ci
+        run: npm i
       - name: "Step-02: 'Build the code'"
         run: npm run build
       - name: "Step-03: 'Deploy the code'"
