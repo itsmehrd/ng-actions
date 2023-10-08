@@ -1,8 +1,14 @@
 name: Display information
 on: [push, workflow_dispatch]
 jobs:
-  display-info:
+  display-info-on-windows-machine:
+    runs-on: windows-latest
+    steps:
+      - name: Display Github Context on Windows
+        run: echo "${{ toJson(github) }}"
+
+  display-info-on-ubuntu-machine:
     runs-on: ubuntu-latest
     steps:
-      - name: Display Github Context
+      - name: Display Github Context on Ubuntu
         run: echo "${{ toJson(github) }}"
