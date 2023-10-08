@@ -1,0 +1,12 @@
+name: "Workflow: Events - Deep dive"
+on:
+  workflow_dispatch:
+  pull_request:
+    types:
+      - opened
+jobs:
+  job--display-random-message:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Step-01: Display some message"
+        run: echo "Success!!"
