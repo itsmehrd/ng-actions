@@ -1,0 +1,10 @@
+name: "Workflow-02: Output event details on issues"
+on:
+  issues:
+    types: [opened, edited, milestoned]
+jobs:
+  do-output-the-event-details:
+    runs-on: windows-latest
+    steps:
+      - name: "Step-01: Output the event details which triggered this workflow"
+        run: echo "${{ github.event_name }} is responsible for this workflow trigger"

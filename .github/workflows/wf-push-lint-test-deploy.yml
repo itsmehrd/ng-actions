@@ -1,0 +1,22 @@
+name: "Workflow-01: Lint, test and deploy code on push"
+on: push
+jobs:
+  do-lint:
+    runs-on: windows-latest
+    steps:
+      - name: "Step-01: 'linting'"
+        run: echo "Linted"
+  do-test:
+    runs-on: windows-latest
+    steps:
+      - name: "Step-01: 'testing'"
+        run: echo "Tested"
+  do-deploy:
+    runs-on: windows-latest
+    steps:
+      - name: "Step-01: 'Install NODE_MODULES'"
+        run: npm ci
+      - name: "Step-02: 'Build the code'"
+        run: npm run build
+      - name: "Step-03: 'Deploy the code'"
+        run: echo "Code deployed"
