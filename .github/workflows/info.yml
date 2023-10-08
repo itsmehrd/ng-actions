@@ -1,8 +1,8 @@
 name: Display information
-on: workflow_dispatch
+on: [push, workflow_dispatch]
 jobs:
   display-info:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Display Github Context
         run: echo "${{ toJson(github) }}"
