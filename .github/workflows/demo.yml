@@ -13,15 +13,16 @@ jobs:
         run: npm ci
       - name: "Step-03: Build website"
         run: npm run build
-      - name: "Step-04: Upload the build artifacts present in the `dist` folder to a named `uploaded-build-artifacts` folder"
+      - name: "Step-04: Get the dynamically generated project folder name"
+        run: find \{\} -type d -maxdepth 1 -mindepth 1
+      - name: "Step-05: Upload the build artifacts present in the `dist` folder to a named `uploaded-build-artifacts` folder"
         uses: actions/upload-artifact@v3
         with:
           name: uploaded-build-artifacts #You can use this name to access the build artifacts in the further jobs
           path: dist #Map the folder name where the build artifacts would be generated when npm runbuild is triggered.
-  
 
       # Suppose if you want to collect  { build artifacts + package.json + package-lock.json } into a folder named 'FILE_COLLECTIONS' then you need to do as below
-      - name: "Step-05: collect { build artifacts + package.json + package-lock.json } into a folder named 'FILE_COLLECTIONS'"
+      - name: "Step-05: collect the { build artifacts + package.json + package-lock.json } into a folder named 'FILE_COLLECTIONS' folder"
         uses: actions/upload-artifact@v3
         with:
           name: FILE_COLLECTIONS
@@ -29,7 +30,6 @@ jobs:
             dist
             package.json
             package-lock.json
-
 
   job__deploy:
     needs: job__build
