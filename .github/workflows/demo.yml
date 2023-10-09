@@ -29,7 +29,7 @@ jobs:
       # HARISH Approach
       - name: "Step-04:b: Get the dynamically generated project folder name and store it in output variable `PROJECT_NAME`"
         id: get-project-name-for-harish-approach
-        run:  echo "PROJECT_NAME=$(find dist/* -type d -execdir)" >> "$GITHUB_OUTPUT"
+        run:  echo "{PROJECT_NAME}={$(find dist/* -type d -execdir)}" >> "$GITHUB_OUTPUT"
 
 
 
