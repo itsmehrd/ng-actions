@@ -1,0 +1,20 @@
+name: Deploy website
+on:
+  push:
+    branches:
+      - job-artifacts-and-outputs
+jobs:
+  job__build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Step-01: Clone Repo"
+        uses: actions/checkout@v3
+      - name: "Step-02: Install dependencies"
+        run: npm ci
+      - name: "Step-03: Build website"
+        run: npm run build
+  job__deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy
+        run: echo "Deploying..."
