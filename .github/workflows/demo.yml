@@ -6,6 +6,9 @@ on:
 jobs:
   job__build:
     runs-on: ubuntu-latest
+    outputs:
+      project-folder-name-op: ${{ steps.get-project-name-for-academind-approach.outputs.project-folder-name-output }}
+      PROJECT_NAME_OUTPUT: ${{ steps.get-project-name-for-harish-approach.outputs.PROJECT_NAME }}
     steps:
       - name: "Step-01: Clone Repo"
         uses: actions/checkout@v3
@@ -13,8 +16,23 @@ jobs:
         run: npm ci
       - name: "Step-03: Build website"
         run: npm run build
-      - name: "Step-04: Get the dynamically generated project folder name"
-        run: echo "proj-name=find dist/* -type d -execdir" >> "$GITHUB_OUTPUT"
+
+
+
+      # MAPPING OUTPUT VARIABLES
+
+      # ACADEMIND approach
+      - name: "Step-04:b: Get the dynamically generated project folder name and store it in output variable `project-folder-name-output`"
+        id: get-project-name-for-academind-approach
+        run: find dist/* -type d -execdir echo '::set-output name=project-folder-name-output::{}' ';'
+
+      # HARISH Approach
+      - name: "Step-04:a: Get the dynamically generated project folder name and store it in output variable `PROJECT_NAME`"
+        id: get-project-name-for-harish-approach
+        run: find dist/* -type d -execdir echo "PROJECT_NAME={}" >> "$GITHUB_OUTPUT"
+
+
+
       - name: "Step-05: Upload the build artifacts present in the `dist` folder to a named `uploaded-build-artifacts` folder"
         uses: actions/upload-artifact@v3
         with:
@@ -44,5 +62,15 @@ jobs:
       - name: "Step-02: List out the contents in the `downloaded-build-artifacts` folder"
         run: cd downloaded-build-artifacts; ls -R
 
-      - name: "Step-03: Deploy"
+
+
+      - name: "Step-03:a: Print the Project name stored using ACADEMIND APPROACH"
+        run: echo "${{ needs.job__build.outputs.project-folder-name-op }}"
+
+      - name: "Step-03:b: Print the Project name stored using HARISH APPROACH"
+        run: echo "${{ needs.job__build.outputs.PROJECT_NAME_OUTPUT }}"
+
+
+
+      - name: "Step-04: Deploy"
         run: echo "Deploying..."
