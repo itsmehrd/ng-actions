@@ -1,0 +1,77 @@
+name: Deploy website
+on: 
+  workflow_dispatch:
+  # push:
+  #   branches:
+  #     - job-artifacts-and-outputs
+jobs:
+  job__build:
+    runs-on: windows-latest
+    outputs:
+      project-folder-name-op: ${{ steps.get-project-name-for-academind-approach.outputs.project-folder-name-output }}
+      PROJECT_NAME_OUTPUT: ${{ steps.get-project-name-for-harish-approach.outputs.PROJECT_NAME }}
+    steps:
+      - name: "Step-01: Clone Repo"
+        uses: actions/checkout@v3
+      - name: "Step-02: Install dependencies"
+        run: npm ci
+      - name: "Step-03: Build website"
+        run: npm run build
+
+
+
+      # MAPPING OUTPUT VARIABLES
+
+      # ACADEMIND approach
+      - name: "Step-04:a: Get the dynamically generated project folder name and store it in output variable `project-folder-name-output`"
+        id: get-project-name-for-academind-approach
+        run: find dist/* -type d -execdir echo '::set-output name=project-folder-name-output::{}' ';'
+
+      # HARISH Approach
+      - name: "Step-04:b: Get the dynamically generated project folder name and store it in output variable `PROJECT_NAME`"
+        id: get-project-name-for-harish-approach
+        run:  echo "{PROJECT_NAME}={$(find dist/* -type d)}" >> "$GITHUB_OUTPUT"
+
+
+
+      - name: "Step-05: Upload the build artifacts present in the `dist` folder to a named `uploaded-build-artifacts` folder"
+        uses: actions/upload-artifact@v3
+        with:
+          name: uploaded-build-artifacts #You can use this name to access the build artifacts in the further jobs
+          path: dist #Map the folder name where the build artifacts would be generated when npm runbuild is triggered.
+
+      # Suppose if you want to collect  { build artifacts + package.json + package-lock.json } into a folder named 'FILE_COLLECTIONS' then you need to do as below
+      - name: "Step-05: collect the { build artifacts + package.json + package-lock.json } into a folder named 'FILE_COLLECTIONS' folder"
+        uses: actions/upload-artifact@v3
+        with:
+          name: FILE_COLLECTIONS
+          path: |
+            dist
+            package.json
+            package-lock.json
+
+  job__deploy:
+    needs: job__build
+    runs-on: windows-latest
+    steps:
+      - name: "Step-01: Download the artifacts from the `uploaded-build-artifacts` folder into a `downloaded-build-artifacts` folder"
+        uses: actions/download-artifact@v3
+        with:
+          name: uploaded-build-artifacts
+          path: downloaded-build-artifacts
+
+      - name: "Step-02: List out the contents in the `downloaded-build-artifacts` folder"
+        run: cd downloaded-build-artifacts; ls -R
+
+
+
+      - name: "Step-03:a: Print the Project name stored using ACADEMIND APPROACH"
+        run: echo "${{ needs.job__build.outputs.project-folder-name-op }}"
+
+      - name: "Step-03:b: Print the Project name stored using HARISH APPROACH"
+        run: echo "${{ needs.job__build.outputs.PROJECT_NAME_OUTPUT }}"
+
+
+
+      - name: "Step-04: Deploy"
+        run: echo "Deploying..."
