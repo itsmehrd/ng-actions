@@ -42,7 +42,7 @@ jobs:
           path: downloaded-build-artifacts
 
       - name: "Step-02: List out the contents in the `downloaded-build-artifacts` folder"
-        run: ls
+        run: ls -R
 
       - name: "Step-03: Deploy"
         run: echo "Deploying..."
