@@ -17,7 +17,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: build-artifacts #You can use this name to access the build artifacts in the further jobs
-          path: build-dist #The folder into which you want to collect the build artifacts
+          path: dist #Map the folder name where the build artifacts would be generated when npm runbuild is triggered.
   job__deploy:
     needs: job__build
     runs-on: ubuntu-latest
