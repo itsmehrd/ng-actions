@@ -18,6 +18,19 @@ jobs:
         with:
           name: build-artifacts #You can use this name to access the build artifacts in the further jobs
           path: dist #Map the folder name where the build artifacts would be generated when npm runbuild is triggered.
+  
+
+      # Suppose if you want to collect  { build artifacts + package.json + package-lock.json } into a folder named 'FILE_COLLECTIONS' then you need to do as below
+      - name: "Step-05: collect { build artifacts + package.json + package-lock.json } into a folder named 'FILE_COLLECTIONS'"
+        uses: actions/upload-artifact@v3
+        with:
+          name: FILE_COLLECTIONS
+          path: |
+            dist
+            package.json
+            package-lock.json
+
+
   job__deploy:
     needs: job__build
     runs-on: ubuntu-latest
