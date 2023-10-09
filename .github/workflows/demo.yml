@@ -13,10 +13,10 @@ jobs:
         run: npm ci
       - name: "Step-03: Build website"
         run: npm run build
-      - name: "Step-04: Upload the build artifacts in a named folder"
+      - name: "Step-04: Upload the build artifacts present in the `dist` folder to a named `uploaded-build-artifacts` folder"
         uses: actions/upload-artifact@v3
         with:
-          name: build-artifacts #You can use this name to access the build artifacts in the further jobs
+          name: uploaded-build-artifacts #You can use this name to access the build artifacts in the further jobs
           path: dist #Map the folder name where the build artifacts would be generated when npm runbuild is triggered.
   
 
@@ -35,5 +35,14 @@ jobs:
     needs: job__build
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy
+      - name: "Step-01: Download the artifacts from the `uploaded-build-artifacts` folder into a `downloaded-build-artifacts` folder"
+        uses: actions/download-artifact@v3
+        with:
+          name: uploaded-build-artifacts
+          path: downloaded-build-artifacts
+
+      - name: "Step-02: List out the contents in the `downloaded-build-artifacts` folder"
+        run: ls
+
+      - name: "Step-03: Deploy"
         run: echo "Deploying..."
