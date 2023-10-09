@@ -24,7 +24,7 @@ jobs:
       # ACADEMIND approach
       - name: "Step-04:a: Get the dynamically generated project folder name and store it in output variable `project-folder-name-output`"
         id: get-project-name-for-academind-approach
-        run: find dist/* -type d -prune -execdir echo '::set-output name=project-folder-name-output::{}' ';'
+        run: find dist/* -type d -exec basename {} \ -execdir echo '::set-output name=project-folder-name-output::{}' ';'
 
       # HARISH Approach
       - name: "Step-04:b: Get the dynamically generated project folder name and store it in output variable `PROJECT_NAME`"
