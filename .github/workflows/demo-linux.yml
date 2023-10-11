@@ -12,6 +12,13 @@ jobs:
     steps:
       - name: "Step-01: Clone Repo"
         uses: actions/checkout@v3
+      
+      # Note: It is not recommended to cache node_modules, as it can break across Node versions and won't work with npm ci
+      - name: "Step-01a: Caching dependecies"
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: node_modues_cache_${{ hashFiles('**/package-lock.json') }}
       - name: "Step-02: Install dependencies"
         run: npm ci
       - name: "Step-03: Build website"
